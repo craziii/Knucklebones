@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,6 +49,21 @@ public class KnucklebonesTest {
                 }
             }
         }
+    }
+
+    @Test public void startingGameInfoTest(){
+        String compareStringPlayer1 = "0,0,0/0,0,0/0,0,0-5-0-0,0,0/0,0,0/0,0,0-0";
+        String compareStringPlayer2 = "0,0,0/0,0,0/0,0,0-3-0-0,0,0/0,0,0/0,0,0-0";
+        Random random = new Random(1);
+        KnucklebonesPlayer player1 = new KnucklebonesPlayer();
+        KnucklebonesPlayer player2 = new KnucklebonesPlayer();
+        player1.getDie().roll(random);
+        player2.getDie().roll(random);
+        Knucklebones.GameInfo gameInfo = new Knucklebones.GameInfo();
+        gameInfo.player1Info = player1.getTurnInfoObject();
+        gameInfo.player2Info = player2.getTurnInfoObject();
+        assertEquals(0, gameInfo.getGameInfo(1).compareTo(compareStringPlayer1));
+        assertEquals(0, gameInfo.getGameInfo(2).compareTo(compareStringPlayer2));
     }
 
     private String buildColumn(int a, int b, int c){

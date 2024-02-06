@@ -16,7 +16,7 @@ package com.crazi.dice;
 public class Knucklebones {
 
 
-    public class GameInfo{
+    public static class GameInfo{
         TurnInfo player1Info;
         TurnInfo player2Info;
 
