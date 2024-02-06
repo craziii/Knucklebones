@@ -2,6 +2,8 @@ package com.crazi.dice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /*
     Playfield input format:
@@ -21,18 +23,17 @@ public class KnucklebonesPlayfield {
     List<Column> playfield;
 
     public KnucklebonesPlayfield(String field){
-        //TODO: Add in reading from csv string
         this.playfield = new ArrayList<>();
         List<String> columnStrings = List.of(field.split("/"));
         for(String columnString : columnStrings){
-            this.playfield.add(new Column(columnString));
+            this.playfield.add(new Column(columnString, columnStrings.indexOf(columnString) + 1));
         }
     }
 
     public KnucklebonesPlayfield(int rows, int columns){
         this.playfield = new ArrayList<>();
         for(int count = 0; count < columns; count++) {
-            this.playfield.add(new Column(rows));
+            this.playfield.add(new Column(rows, count));
         }
     }
 
@@ -51,24 +52,75 @@ public class KnucklebonesPlayfield {
         return output.toString();
     }
 
-    public class Column{
+    public void sortPlayfield(){
+        for(Column column : playfield){
+            column.sortColumn();
+        }
+    }
+
+    public void removeFromColumn(int value, int column){
+        playfield.stream().forEach((x) -> {
+            if(x.columnNum == column){
+                x.removeFromColumn(value);
+            }
+        });
+    }
+
+    public int getScore(){
+        int total = 0;
+        for(Column column : playfield){
+            total += column.getScore();
+        }
+        return total;
+    }
+
+    public static class Column{
+
+        int columnNum;
         List<Integer> rows;
 
-        public Column(int rows){
+        public Column(int rows, int column){
             this.rows = new ArrayList<>();
             for(int count = 0; count < rows; count++){
                 this.rows.add(0);
             }
+            this.columnNum = column;
         }
 
-        public Column(String column){
+        public Column(String column, int columnNum){
             this.rows = new ArrayList<>();
             for(String row : List.of(column.split(","))){
                 this.rows.add(Integer.valueOf(row));
             }
+            this.columnNum = columnNum;
         }
 
-        //TODO: Add in reading from csv string
+        public void removeFromColumn(int value){
+            rows = rows.stream().map((x) -> {
+                if(x == value) {
+                    return 0;
+                }
+                else{
+                    return x;
+                }
+            }).collect(Collectors.toList());
+            sortColumn();
+        }
 
+        public void sortColumn(){
+            List<Integer> newColumn = new ArrayList<>();
+            Map<Boolean, List<Integer>> outcome = rows.stream().collect(Collectors.partitioningBy((x) -> x != 0));
+            newColumn.addAll(outcome.get(true));
+            newColumn.addAll(outcome.get(false));
+            rows = newColumn;
+        }
+
+        public int getScore() {
+            int total = 0;
+            for(int row : rows){
+                total += (int) (rows.stream().filter((x) -> x == row).count() * row);
+            }
+            return total;
+        }
     }
 }
