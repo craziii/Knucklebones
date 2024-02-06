@@ -20,27 +20,51 @@ public class KnucklebonesPlayfield {
 
     List<Column> playfield;
 
-    //TODO: Add in reading from csv string
-    //TODO: Add in writing to csv string
-
-    KnucklebonesPlayfield(String field){
-
+    public KnucklebonesPlayfield(String field){
+        //TODO: Add in reading from csv string
+        this.playfield = new ArrayList<>();
+        List<String> columnStrings = List.of(field.split("/"));
+        for(String columnString : columnStrings){
+            this.playfield.add(new Column(columnString));
+        }
     }
 
-    KnucklebonesPlayfield(int rows, int columns){
+    public KnucklebonesPlayfield(int rows, int columns){
         this.playfield = new ArrayList<>();
         for(int count = 0; count < columns; count++) {
             this.playfield.add(new Column(rows));
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        for(Column column : playfield){
+            for(int row : column.rows){
+                output.append(row);
+                output.append(",");
+            }
+            output.deleteCharAt(output.length()-1);
+            output.append("/");
+        }
+        output.deleteCharAt(output.length()-1);
+        return output.toString();
+    }
+
     public class Column{
         List<Integer> rows;
 
-        Column(int rows){
+        public Column(int rows){
             this.rows = new ArrayList<>();
             for(int count = 0; count < rows; count++){
                 this.rows.add(0);
+            }
+        }
+
+        public Column(String column){
+            this.rows = new ArrayList<>();
+            for(String row : List.of(column.split(","))){
+                this.rows.add(Integer.valueOf(row));
             }
         }
 
