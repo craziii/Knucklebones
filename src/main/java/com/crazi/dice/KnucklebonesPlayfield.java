@@ -74,6 +74,15 @@ public class KnucklebonesPlayfield {
         return total;
     }
 
+    public boolean isFull(){
+        for(Column column : playfield){
+            if(!column.isFull()){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static class Column{
 
         int columnNum;
@@ -121,6 +130,10 @@ public class KnucklebonesPlayfield {
                 total += (int) (rows.stream().filter((x) -> x == row).count() * row);
             }
             return total;
+        }
+
+        public boolean isFull(){
+            return rows.stream().noneMatch((x) -> x == 0);
         }
     }
 }

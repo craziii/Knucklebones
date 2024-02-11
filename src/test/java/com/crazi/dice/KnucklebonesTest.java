@@ -55,11 +55,11 @@ public class KnucklebonesTest {
         String compareStringPlayer1 = "0,0,0/0,0,0/0,0,0-5-0-0,0,0/0,0,0/0,0,0-0";
         String compareStringPlayer2 = "0,0,0/0,0,0/0,0,0-3-0-0,0,0/0,0,0/0,0,0-0";
         Random random = new Random(1);
-        KnucklebonesPlayer player1 = new KnucklebonesPlayer();
-        KnucklebonesPlayer player2 = new KnucklebonesPlayer();
+        KnucklebonesPlayer player1 = new KnucklebonesPlayer(1);
+        KnucklebonesPlayer player2 = new KnucklebonesPlayer(2);
         player1.getDie().roll(random);
         player2.getDie().roll(random);
-        Knucklebones.GameInfo gameInfo = new Knucklebones.GameInfo();
+        Knucklebones.GameInfo gameInfo = new Knucklebones.GameInfo(player1, player2);
         gameInfo.player1Info = player1.getTurnInfoObject();
         gameInfo.player2Info = player2.getTurnInfoObject();
         assertEquals(0, gameInfo.getGameInfo(1).compareTo(compareStringPlayer1));

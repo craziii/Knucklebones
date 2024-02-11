@@ -2,11 +2,13 @@ package com.crazi.dice;
 
 public class KnucklebonesPlayer {
 
+    private int playerNum;
     private boolean isCurrentPlayer;
     private Die die;
     private KnucklebonesPlayfield field;
 
-    public KnucklebonesPlayer(){
+    public KnucklebonesPlayer(int playerNum){
+        this.playerNum = playerNum;
         this.die = CommonDie.D6();
         this.field = new KnucklebonesPlayfield("0,0,0/0,0,0/0,0,0");
         this.isCurrentPlayer = false;
@@ -19,7 +21,7 @@ public class KnucklebonesPlayer {
     }
 
     public Knucklebones.TurnInfo getTurnInfoObject(){
-        return new Knucklebones.TurnInfo(getField(), getDie().getCurrentValue(), getField().getScore());
+        return new Knucklebones.TurnInfo(playerNum, this, getDie().getCurrentValue(), getField().getScore());
     }
 
     public boolean isCurrentPlayer() {
@@ -44,5 +46,9 @@ public class KnucklebonesPlayer {
 
     public void setField(KnucklebonesPlayfield field) {
         this.field = field;
+    }
+
+    public boolean isPlayfieldFull(){
+        return field.isFull();
     }
 }
